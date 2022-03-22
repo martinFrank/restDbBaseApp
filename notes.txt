@@ -1,0 +1,10 @@
+
+on windows shell:
+curl -X POST -H "Content-Type: application/json" -d "{\"name\":\"name2\",\"email\":\"test.mail@test.com\"}" http://localhost:8080/users
+
+on unix:
+curl -X POST -H "Content-Type: application/json" -d '{"name":"name2","email":"test.mail@test.com"}' http://localhost:8080/users
+
+CREATE DATABASE insomnia
+CREATE USER 'insomniaSpring'@'%' IDENTIFIED BY 'insomnia123';
+GRANT ALL PRIVILEGES ON insomnia.* TO 'insomniaSpring';
