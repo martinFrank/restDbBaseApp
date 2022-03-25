@@ -1,6 +1,7 @@
 
 on windows shell:
 curl -X POST -H "Content-Type: application/json" -d "{\"name\":\"name2\",\"email\":\"test.mail@test.com\"}" http://localhost:8080/users
+curl -X GET -H "Content-Type: application/json" http://localhost:8080/users/6
 
 on unix:
 curl -X POST -H "Content-Type: application/json" -d '{"name":"name2","email":"test.mail@test.com"}' http://localhost:8080/users
