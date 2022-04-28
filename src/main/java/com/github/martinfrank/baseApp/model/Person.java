@@ -1,21 +1,15 @@
 package com.github.martinfrank.baseApp.model;
 
-
-import io.swagger.annotations.ApiModel;
-import org.springframework.data.annotation.Transient;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@ApiModel(description = "Class representing a contact in the application.")
 @Entity // This tells Hibernate to make a table out of this class
-public class User {
+public class Person {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Transient
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
