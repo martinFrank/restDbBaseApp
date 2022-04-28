@@ -24,13 +24,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person update(Person person) {
-        Optional<Person> userCandidate = personRepository.findById(person.getId());
+        Optional<Person> personCandidate = personRepository.findById(person.getId());
 
-        if (userCandidate.isPresent()) {
-            Person personToUpdate = userCandidate.get();
+        if (personCandidate.isPresent()) {
+            Person personToUpdate = personCandidate.get();
             personToUpdate.setId(person.getId());
             personToUpdate.setName(person.getName());
-            personToUpdate.setEmail(person.getEmail());
             personRepository.save(personToUpdate);
             return personToUpdate;
         } else {
@@ -54,12 +53,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void delete(long personId) {
-        Optional<Person> candidate = this.personRepository.findById(personId);
+    public void delete(long id) {
+        Optional<Person> candidate = this.personRepository.findById(id);
         if (candidate.isPresent()) {
             this.personRepository.delete(candidate.get());
         } else {
-            throw new ResourceNotFoundException("Record not found with id : " + personId);
+            throw new ResourceNotFoundException("Record not found with id : " + id);
         }
     }
 }

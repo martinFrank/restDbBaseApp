@@ -3,11 +3,9 @@ package com.github.martinfrank.baseApp.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
 
-@Entity // This tells Hibernate to make a table out of this class
-public class Person {
+@Entity
+public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,9 +13,8 @@ public class Person {
 
     private String name;
 
-    @OneToMany (mappedBy = "owner")
-    @JsonIgnore
-    private Set<Pet> pets;
+    @ManyToOne
+    private Person owner;
 
     public Long getId() {
         return id;
@@ -35,12 +32,11 @@ public class Person {
         this.name = name;
     }
 
-    public Set<Pet> getPets() {
-        return pets;
+    public Person getOwner() {
+        return owner;
     }
 
-    public void setPets(Collection<Pet> pets) {
-        this.pets.clear();
-        this.pets.addAll(pets);
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 }

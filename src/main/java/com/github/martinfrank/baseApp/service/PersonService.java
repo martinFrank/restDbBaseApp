@@ -12,7 +12,7 @@ public interface PersonService {
 
     List<Person> getAll();
 
-    Person getById(long personId);
+    Person getById(long id);
 
     void delete(long id);
 

@@ -2,15 +2,15 @@ package com.github.martinfrank.baseApp.controller;
 
 
 import com.github.martinfrank.baseApp.model.Person;
+import com.github.martinfrank.baseApp.model.Pet;
 import com.github.martinfrank.baseApp.service.PersonService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.github.martinfrank.baseApp.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,6 +19,9 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private PetService petService;
 
     @GetMapping()
     public ResponseEntity<List<Person>> getAll() {
@@ -32,18 +35,37 @@ public class PersonController {
 
     @PostMapping()
     public ResponseEntity<Person> create(@RequestBody Person person) {
-        return ResponseEntity.ok().body(this.personService.create(person));
+        return ResponseEntity.ok().body(personService.create(person));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Person> update(@PathVariable long id, @RequestBody Person person) {
         person.setId(id);
-        return ResponseEntity.ok().body(this.personService.update(person));
+        return ResponseEntity.ok().body(personService.update(person));
     }
 
     @DeleteMapping("/{id}")
     public HttpStatus delete(@PathVariable long id) {
-        this.personService.delete(id);
+        personService.delete(id);
         return HttpStatus.OK;
+    }
+
+    @PutMapping("{id}/pets")
+    public HttpStatus setPets(@PathVariable long id, @RequestBody List<Long> petIds){
+        Person person = personService.getById(id);
+        person.getPets().forEach(p -> {p.setOwner(null); petService.update(p);});
+        List<Pet> pets = petService.getByIds(petIds);
+        person.setPets(pets);
+        pets.forEach(p -> p.setOwner(person));
+        personService.update(person);
+        pets.forEach(petService::update);
+        return HttpStatus.OK;
+    }
+
+    @GetMapping("{id}/pets")
+    public ResponseEntity<List<Pet>> getPets(@PathVariable long id){
+        Person person = personService.getById(id);
+        List<Pet> pets = new ArrayList<>(person.getPets());
+        return ResponseEntity.ok().body(pets);
     }
 }
