@@ -9,3 +9,11 @@ curl -X POST -H "Content-Type: application/json" -d '{"name":"name2","email":"te
 CREATE DATABASE insomnia
 CREATE USER 'insomniaSpring'@'%' IDENTIFIED BY 'insomnia123';
 GRANT ALL PRIVILEGES ON insomnia.* TO 'insomniaSpring';
+
+
+docker pull postgres
+sudo docker run --rm -d -p 5432:5432 -e POSTGRES_PASSWORD=123secret postgres
+
+achtung - braucht noch die privilegien die per script gesetzt werden müssen
+docker pull mariadb
+docker run --rm -d -p 3306:3306 -e MARIADB_USER=insomniaSpring -e MARIADB_PASSWORD=insomnia123 -e MARIADB_ROOT_PASSWORD=insomnia123  mariadb:latest

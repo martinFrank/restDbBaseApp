@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/persons") //https://restfulapi.net/resource-naming/ should be PLURAL!
 public class PersonController {
 
     @Autowired
@@ -53,13 +53,24 @@ public class PersonController {
     @PutMapping("{id}/pets")
     public HttpStatus setPets(@PathVariable long id, @RequestBody List<Long> petIds){
         Person person = personService.getById(id);
-        person.getPets().forEach(p -> {p.setOwner(null); petService.update(p);});
+        removePets(person);
         List<Pet> pets = petService.getByIds(petIds);
+        addPets(person, pets);
+        return HttpStatus.OK;
+    }
+
+    private void addPets(Person person, List<Pet> pets) {
         person.setPets(pets);
         pets.forEach(p -> p.setOwner(person));
         personService.update(person);
         pets.forEach(petService::update);
-        return HttpStatus.OK;
+    }
+
+    private void removePets(Person person) {
+        person.getPets().forEach(p -> {
+            p.setOwner(null);
+            petService.update(p);
+        });
     }
 
     @GetMapping("{id}/pets")
